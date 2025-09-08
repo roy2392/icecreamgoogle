@@ -1,11 +1,19 @@
+# Onboarding Screen Design
 
-  # Onboarding Screen Design
+This project now includes a simple chat interface powered by Google's Gemini model.
 
-  This is a code bundle for Onboarding Screen Design. The original project is available at https://www.figma.com/design/zBi2DHSLB5vcSWZA1edz1g/Onboarding-Screen-Design.
+## Running the code
 
-  ## Running the code
+Run `npm i` to install the dependencies.
 
-  Run `npm i` to install the dependencies.
+Start the frontend development server:
 
-  Run `npm run dev` to start the development server.
-  
+```
+npm run dev
+```
+
+Start the Gemini backend (requires `GEMINI_API_KEY` environment variable):
+
+```
+GEMINI_API_KEY=your_key_here npm run server
+```
