@@ -9,5 +9,7 @@
       "source": "/api/chat",
       "destination": "/api/chat.js"
     }
-  ]
+  ],
+  "buildCommand": "npm run build",
+  "outputDirectory": "build"
 }
