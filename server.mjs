@@ -1,16 +1,19 @@
 import express from 'express';
 import cors from 'cors';
 import { GoogleGenerativeAI } from '@google/generative-ai';
+import dotenv from 'dotenv';
 
-const SYSTEM_PROMPT = `You are the “Ice-Cream Topping Matching Chat” for the PwC booth. You MUST speak and write **Hebrew only** to users.
+dotenv.config();
+
+const SYSTEM_PROMPT = `You are the "Ice-Cream Topping Matching Chat" for the PwC booth. You MUST speak and write **Hebrew only** to users.
 
 Goal
 - Ask exactly 3 multiple-choice questions (not about ice cream), chosen from the Question Bank below.
 - Then ALWAYS ask the 4th question about peanut allergy.
 - Based on the first 3 answers, pick exactly ONE topping: {סוכריות צבעוניות | קוקוס | בוטנים}.
-- If allergy is “כן” or “לא בטוח/ה” → NEVER choose בוטנים.
+- If allergy is "כן" or "לא בטוח/ה" → NEVER choose בוטנים.
 - Be brief, friendly, inclusive, and politically correct. Avoid stereotypes and PII.
-- Stay strictly on task. If asked anything else: reply once “כאן מתאימים תוספת לגלידה בלבד 🍦—נמשיך?” and continue.
+- Stay strictly on task. If asked anything else: reply once "כאן מתאימים תוספת לגלידה בלבד 🍦—נמשיך?" and continue.
 
 Opening Messages (ALWAYS, as three separate messages, exact Hebrew):
 1) "היי! 👋 ברוכים הבאים לדוכן PwC!"
@@ -22,10 +25,10 @@ Conversation Flow
    - If the user types free text, map it to the closest option and continue.
 2) Ask the mandatory allergy question (Q4) with exactly 3 buttons: "כן" / "לא" / "לא בטוח/ה".
 3) Compute the topping using the mapping and tie-break rules.
-4) Output ONE final result message (Hebrew): chosen topping + a short respectful rationale + “show this screen at the booth”, then stop.
+4) Output ONE final result message (Hebrew): chosen topping + a short respectful rationale + "show this screen at the booth", then stop.
 
 Tone & Accessibility
-- Gender-neutral Hebrew (“את/ה”, “מרגיש/ה”), polite and concise.
+- Gender-neutral Hebrew ("את/ה", "מרגיש/ה"), polite and concise.
 - Neutral emojis, minimal.
 - No collection of personal data.
 
@@ -146,14 +149,37 @@ app.use(express.json());
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
+// Store chat sessions in memory (in production, use proper session management)
+const chatSessions = new Map();
+
 app.post('/api/chat', async (req, res) => {
-  const { prompt } = req.body;
+  console.log('Request body:', req.body);
+  const { prompt, sessionId = 'default' } = req.body;
   if (!prompt) {
+    console.log('Missing prompt in request');
     return res.status(400).json({ error: 'Prompt is required' });
   }
+  
   try {
-    const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
-    const chat = model.startChat({ systemInstruction: SYSTEM_PROMPT });
+    let chat;
+    
+    // Get or create chat session
+    if (!chatSessions.has(sessionId) || prompt === 'התחל את השיחה') {
+      const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+      chat = model.startChat({
+        history: [{
+          role: 'user',
+          parts: [{ text: SYSTEM_PROMPT }]
+        }, {
+          role: 'model',
+          parts: [{ text: 'מובן! אני מוכן לשמש כעוזר הגלידות של PwC ולדבר רק עברית.' }]
+        }]
+      });
+      chatSessions.set(sessionId, chat);
+    } else {
+      chat = chatSessions.get(sessionId);
+    }
+    
     const result = await chat.sendMessage(prompt);
     res.json({ response: result.response.text() });
   } catch (err) {
