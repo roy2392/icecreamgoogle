@@ -39,15 +39,20 @@ export function ChatBubble({ message, isBot }: ChatBubbleProps) {
           : "bg-[#FF6B20] text-white shadow-xl rounded-br-sm border-2 border-[#E85D1C]"
       }`}
       style={!isBot ? { backgroundColor: '#FF6B20', opacity: 1 } : undefined}>
-        <motion.p 
+        <motion.div 
           className={`text-sm leading-relaxed text-right ${isBot ? '' : 'font-medium'}`}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: isBot ? 0.3 : 0.1 }}
           dir="rtl"
         >
-          {message}
-        </motion.p>
+          {message.split('\n').map((line, index) => (
+            <div key={index}>
+              {line}
+              {index < message.split('\n').length - 1 && <br />}
+            </div>
+          ))}
+        </motion.div>
       </div>
     </motion.div>
   )
