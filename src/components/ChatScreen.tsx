@@ -148,7 +148,7 @@ export function ChatScreen({ onComplete }: ChatScreenProps) {
   const currentQuestionData = questions[currentQuestion]
 
   return (
-    <div className="min-h-screen min-h-[100dvh] colorful-sprinkles-pattern flex flex-col max-w-md mx-auto relative overflow-hidden">
+    <div className="min-h-screen min-h-[100dvh] colorful-sprinkles-pattern flex flex-col w-full relative overflow-hidden">
       {/* אלמנטים צפים מעל הרקע */}
       <motion.div 
         className="absolute top-20 left-8 text-2xl opacity-60"

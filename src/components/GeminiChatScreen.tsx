@@ -144,7 +144,7 @@ export function GeminiChatScreen({ onComplete }: GeminiChatScreenProps) {
   }
 
   return (
-    <div className="min-h-screen min-h-[100dvh] colorful-sprinkles-pattern flex flex-col max-w-3xl mx-auto relative overflow-hidden md:max-w-2xl lg:max-w-3xl">
+    <div className="min-h-screen min-h-[100dvh] colorful-sprinkles-pattern flex flex-col w-full relative overflow-hidden">
       {/* Floating Elements - Hidden on small screens, visible on tablets and up */}
       <motion.div 
         className="hidden md:block absolute top-20 left-8 text-2xl md:text-3xl opacity-60"
@@ -218,7 +218,7 @@ export function GeminiChatScreen({ onComplete }: GeminiChatScreenProps) {
       {/* Input Area */}
       {!conversationComplete && (
         <div className="p-4 md:p-6 bg-white/10 backdrop-blur-md border-t border-white/20">
-          <form onSubmit={handleInputSubmit} className="flex gap-2 md:gap-4 max-w-4xl mx-auto">
+          <form onSubmit={handleInputSubmit} className="flex gap-2 md:gap-4">
             <Input
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}

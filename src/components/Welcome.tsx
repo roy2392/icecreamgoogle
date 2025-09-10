@@ -9,7 +9,7 @@ interface WelcomeProps {
 
 export function Welcome({ onStart }: WelcomeProps) {
   return (
-    <div className="relative h-screen h-[100dvh] overflow-hidden flex items-center justify-center text-white max-w-md mx-auto" dir="rtl">
+    <div className="relative h-screen h-[100dvh] overflow-hidden flex items-center justify-center text-white w-full" dir="rtl">
       {/* Video Background */}
       <video 
         className="absolute top-0 left-0 w-full h-full object-cover -z-10 scale-110"
