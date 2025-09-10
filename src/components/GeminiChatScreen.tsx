@@ -199,7 +199,6 @@ export function GeminiChatScreen({ onComplete }: GeminiChatScreenProps) {
           <div className="w-8 h-8 bg-gradient-to-br from-pink-400 to-orange-500 rounded-full flex items-center justify-center text-white font-bold">🍦</div>
           <div className="text-right">
             <h1 className="text-lg font-bold text-gray-800">NEXT AICREAM</h1>
-            <p className="text-xs text-gray-600">מותאם בינה מלאכותית</p>
           </div>
         </div>
         <img src={pwcLogo} alt="PwC" className="w-12 h-6" />

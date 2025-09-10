@@ -36,10 +36,11 @@ export function ChatBubble({ message, isBot }: ChatBubbleProps) {
       <div className={`max-w-xs lg:max-w-md px-4 py-3 rounded-2xl font-fredoka ${
         isBot 
           ? "bg-white/95 shadow-lg border border-white/70 text-gray-800 rounded-tl-sm backdrop-blur-sm" 
-          : "bg-[#FF6B20] text-white shadow-lg rounded-br-sm border border-white/20"
-      }`}>
+          : "bg-[#FF6B20] text-white shadow-xl rounded-br-sm border-2 border-[#E85D1C]"
+      }`}
+      style={!isBot ? { backgroundColor: '#FF6B20', opacity: 1 } : undefined}>
         <motion.p 
-          className="text-sm leading-relaxed text-right"
+          className={`text-sm leading-relaxed text-right ${isBot ? '' : 'font-medium'}`}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: isBot ? 0.3 : 0.1 }}
