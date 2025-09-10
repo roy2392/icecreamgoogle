@@ -231,7 +231,10 @@ export function GeminiChatScreen({ onComplete }: GeminiChatScreenProps) {
             <button
               type="submit"
               disabled={isTyping || !inputValue.trim()}
-              className="px-4 py-2 bg-pink-500 text-white rounded-lg font-medium disabled:opacity-50 disabled:cursor-not-allowed hover:bg-pink-600 transition-colors"
+              className="w-12 h-12 rounded-full text-white font-bold text-lg shadow-lg disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-xl active:scale-95 transition-all duration-200 border-2"
+              style={{ backgroundColor: '#FF6B20', borderColor: '#E85D1C' }}
+              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#E85D1C'}
+              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#FF6B20'}
             >
               שלח
             </button>
