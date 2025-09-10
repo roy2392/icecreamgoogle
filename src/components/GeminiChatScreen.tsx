@@ -144,7 +144,7 @@ export function GeminiChatScreen({ onComplete }: GeminiChatScreenProps) {
   }
 
   return (
-    <div className="min-h-screen min-h-[100dvh] colorful-sprinkles-pattern flex flex-col w-full relative overflow-hidden">
+    <div className="h-screen h-[100dvh] colorful-sprinkles-pattern flex flex-col w-full relative overflow-hidden">
       {/* Floating Elements - Hidden on small screens, visible on tablets and up */}
       <motion.div 
         className="hidden md:block absolute top-20 left-8 text-2xl md:text-3xl opacity-60"
@@ -194,7 +194,7 @@ export function GeminiChatScreen({ onComplete }: GeminiChatScreenProps) {
       </motion.div>
 
       {/* Header */}
-      <div className="flex items-center justify-between p-4 md:p-6 pt-safe bg-white/10 backdrop-blur-md border-b border-white/20">
+      <div className="flex items-center justify-between p-4 md:p-6 lg:landscape:p-4 pt-safe bg-white/10 backdrop-blur-md border-b border-white/20">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 md:w-10 md:h-10 bg-gradient-to-br from-pink-400 to-orange-500 rounded-full flex items-center justify-center text-white font-bold text-sm md:text-base">🍦</div>
           <div className="text-right">
@@ -205,7 +205,7 @@ export function GeminiChatScreen({ onComplete }: GeminiChatScreenProps) {
       </div>
 
       {/* Chat Messages */}
-      <div className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8 space-y-4 md:space-y-6 pb-safe">
+      <div className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8 lg:landscape:p-4 space-y-4 md:space-y-6 pb-4 md:pb-6">
         {messages.map((message) => (
           <ChatBubble key={message.id} message={message.text} isBot={message.isBot} />
         ))}
@@ -217,7 +217,7 @@ export function GeminiChatScreen({ onComplete }: GeminiChatScreenProps) {
 
       {/* Input Area */}
       {!conversationComplete && (
-        <div className="p-4 md:p-6 bg-white/10 backdrop-blur-md border-t border-white/20">
+        <div className="p-4 md:p-6 lg:landscape:p-4 bg-white/10 backdrop-blur-md border-t border-white/20">
           <form onSubmit={handleInputSubmit} className="flex gap-2 md:gap-4">
             <Input
               value={inputValue}
