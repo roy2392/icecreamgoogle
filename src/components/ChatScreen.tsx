@@ -57,12 +57,32 @@ export function ChatScreen({ onComplete }: ChatScreenProps) {
   }, [])
 
   const addBotMessage = (text: string) => {
-    const newMessage: Message = {
-      id: Date.now().toString(),
-      text,
-      isBot: true
+    // Check if message contains numbered list and split it
+    const numberedParts = text.split(/(?=\d+\))/);
+    
+    if (numberedParts.length > 1 && numberedParts.some(part => /^\d+\)/.test(part.trim()))) {
+      // Split numbered messages into separate bubbles
+      numberedParts.forEach((part, index) => {
+        if (part.trim()) {
+          setTimeout(() => {
+            const newMessage: Message = {
+              id: `${Date.now()}-${index}`,
+              text: part.trim(),
+              isBot: true
+            }
+            setMessages(prev => [...prev, newMessage])
+          }, index * 800) // Delay each message by 800ms
+        }
+      })
+    } else {
+      // Single message
+      const newMessage: Message = {
+        id: Date.now().toString(),
+        text,
+        isBot: true
+      }
+      setMessages(prev => [...prev, newMessage])
     }
-    setMessages(prev => [...prev, newMessage])
   }
 
   const addUserMessage = (text: string) => {
@@ -118,6 +138,7 @@ export function ChatScreen({ onComplete }: ChatScreenProps) {
 
   const handleInputSubmit = (e: React.FormEvent) => {
     e.preventDefault()
+    console.log('Button clicked!', inputValue) // Debug log
     if (inputValue.trim() && currentQuestion < questions.length) {
       const question = questions[currentQuestion]
       handleAnswer(question.id, inputValue.trim(), inputValue.trim())
@@ -263,7 +284,7 @@ export function ChatScreen({ onComplete }: ChatScreenProps) {
         <div className="p-4 pb-[env(safe-area-inset-bottom,1rem)] bg-white/98 backdrop-blur-md border-t border-white/60 shadow-lg relative z-10 sticky bottom-0">
           {/* Text Input - Always visible */}
           <form onSubmit={handleInputSubmit} className="mb-4">
-            <div className="flex gap-2 items-center bg-white/95 border border-white/70 rounded-full px-2 py-1 backdrop-blur-sm shadow-sm focus-within:border-[#FD5109] focus-within:ring-1 focus-within:ring-[#FD5109] transition-all duration-200" dir="rtl">
+            <div className="flex gap-2 items-center bg-white/95 border border-white/70 rounded-full px-2 py-2 backdrop-blur-sm shadow-sm focus-within:border-[#FD5109] focus-within:ring-1 focus-within:ring-[#FD5109] transition-all duration-200" dir="rtl">
               <Input
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
@@ -274,26 +295,10 @@ export function ChatScreen({ onComplete }: ChatScreenProps) {
               <button
                 type="submit" 
                 disabled={!inputValue.trim()}
-                className="relative bg-gradient-to-b from-[#FFE4E1] via-[#FD5109] to-[#D93954] hover:from-[#FFD6CC] hover:via-[#E04300] hover:to-[#B8334A] disabled:from-gray-200 disabled:via-gray-300 disabled:to-gray-400 text-white rounded-t-full rounded-b-lg h-12 w-10 flex items-center justify-center transition-all duration-200 flex-shrink-0 shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-95"
-                style={{
-                  borderTopLeftRadius: '50%',
-                  borderTopRightRadius: '50%',
-                  borderBottomLeftRadius: '20%',
-                  borderBottomRightRadius: '20%'
-                }}
+                className="bg-gradient-to-r from-[#FD5109] to-[#FF6B20] hover:from-[#E04300] hover:to-[#FF5500] disabled:bg-gray-400 text-white rounded-full h-14 w-14 flex items-center justify-center transition-all duration-200 flex-shrink-0 shadow-xl border-3 border-[#D93954] z-20 transform hover:scale-110 active:scale-95"
+                style={{ fontSize: '24px', minWidth: '56px', minHeight: '56px' }}
               >
-                {/* Ice cream cone pattern */}
-                <div className="absolute bottom-0 left-0 right-0 h-4 bg-gradient-to-b from-[#D4A574] to-[#B8956A] rounded-b-lg opacity-80"
-                     style={{
-                       borderBottomLeftRadius: '20%',
-                       borderBottomRightRadius: '20%',
-                       background: 'repeating-linear-gradient(45deg, #D4A574, #D4A574 2px, #B8956A 2px, #B8956A 4px)'
-                     }}
-                />
-                {/* Send icon */}
-                <Send className="w-4 h-4 relative z-10 text-white drop-shadow-sm" />
-                {/* Ice cream highlight */}
-                <div className="absolute top-1 left-2 w-2 h-2 bg-white/30 rounded-full blur-sm" />
+                🍦
               </button>
             </div>
           </form>

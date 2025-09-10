@@ -4,7 +4,6 @@ import { Input } from "./ui/input"
 import { useKeyboardVisible } from "./ui/use-keyboard"
 import { motion } from "motion/react"
 import pwcLogo from 'figma:asset/17ec2cf0792188f890167fc945e9be5f10b81f22.png'
-import logoImage from 'figma:asset/6c5a68932be37448c86b9f62ec515ef146aac3bc.png'
 
 interface GeminiChatScreenProps {
   onComplete: (answers: Record<string, string>) => void
@@ -197,7 +196,7 @@ export function GeminiChatScreen({ onComplete }: GeminiChatScreenProps) {
       {/* Header */}
       <div className="flex items-center justify-between p-4 pt-safe bg-white/10 backdrop-blur-md border-b border-white/20">
         <div className="flex items-center gap-3">
-          <img src={logoImage} alt="Ice Cream" className="w-8 h-8" />
+          <div className="w-8 h-8 bg-gradient-to-br from-pink-400 to-orange-500 rounded-full flex items-center justify-center text-white font-bold">🍦</div>
           <div className="text-right">
             <h1 className="text-lg font-bold text-gray-800">NEXT AICREAM</h1>
             <p className="text-xs text-gray-600">מותאם בינה מלאכותית</p>

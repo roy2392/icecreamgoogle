@@ -36,28 +36,17 @@ export function ChatBubble({ message, isBot }: ChatBubbleProps) {
       <div className={`max-w-xs lg:max-w-md px-4 py-3 rounded-2xl font-fredoka ${
         isBot 
           ? "bg-white/95 shadow-lg border border-white/70 text-gray-800 rounded-tl-sm backdrop-blur-sm" 
-          : "bg-[#D93954] text-white shadow-lg rounded-br-sm border border-white/20"
+          : "bg-[#FF6B20] text-white shadow-lg rounded-br-sm border border-white/20"
       }`}>
-        <motion.div 
+        <motion.p 
           className="text-sm leading-relaxed text-right"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: isBot ? 0.3 : 0.1 }}
           dir="rtl"
         >
-          {message.split(/(\d+\))/).map((part, index) => {
-            // Check if this is a number pattern (like "1)" or "2)")
-            if (/^\d+\)$/.test(part)) {
-              return (
-                <span key={index}>
-                  {index > 0 && <br />}
-                  <span className="font-semibold">{part}</span>
-                </span>
-              );
-            }
-            return <span key={index}>{part}</span>;
-          })}
-        </motion.div>
+          {message}
+        </motion.p>
       </div>
     </motion.div>
   )
@@ -99,7 +88,7 @@ export function TypingIndicator() {
             {[0, 1, 2].map((i) => (
               <motion.div
                 key={i}
-                className="w-2 h-2 bg-[#D93954]/60 rounded-full"
+                className="w-2 h-2 bg-[#FF6B20]/60 rounded-full"
                 animate={{
                   scale: [1, 1.5, 1],
                   opacity: [0.4, 1, 0.4]
