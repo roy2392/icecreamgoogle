@@ -29,18 +29,18 @@ export function ChatBubble({ message, isBot }: ChatBubbleProps) {
           <img 
             src={botAvatarImage} 
             alt="AIce Cream Bot" 
-            className="w-10 h-10 rounded-full shadow-md border-2 border-white"
+            className="w-10 h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 rounded-full shadow-md border-2 border-white"
           />
         </motion.div>
       )}
-      <div className={`max-w-xs lg:max-w-md px-4 py-3 rounded-2xl font-fredoka ${
+      <div className={`max-w-xs md:max-w-sm lg:max-w-lg xl:max-w-xl px-4 md:px-5 lg:px-6 py-3 md:py-4 rounded-2xl font-fredoka ${
         isBot 
           ? "bg-white/95 shadow-lg border border-white/70 text-gray-800 rounded-tl-sm backdrop-blur-sm" 
           : "bg-[#FF6B20] text-white shadow-xl rounded-br-sm border-2 border-[#E85D1C]"
       }`}
       style={!isBot ? { backgroundColor: '#FF6B20', opacity: 1 } : undefined}>
         <motion.div 
-          className={`text-sm leading-relaxed text-right ${isBot ? '' : 'font-medium'}`}
+          className={`text-sm md:text-base lg:text-lg leading-relaxed text-right ${isBot ? '' : 'font-medium'}`}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: isBot ? 0.3 : 0.1 }}
@@ -76,7 +76,7 @@ export function TypingIndicator() {
         <motion.img 
           src={botAvatarImage} 
           alt="AIce Cream Bot" 
-          className="w-10 h-10 rounded-full shadow-md border-2 border-white"
+          className="w-10 h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 rounded-full shadow-md border-2 border-white"
           animate={{ 
             scale: [1, 1.05, 1],
           }}
@@ -87,9 +87,9 @@ export function TypingIndicator() {
           }}
         />
       </motion.div>
-      <div className="max-w-xs lg:max-w-md px-4 py-3 rounded-2xl bg-white/95 shadow-lg border border-white/70 rounded-tl-sm backdrop-blur-sm">
+      <div className="max-w-xs md:max-w-sm lg:max-w-lg xl:max-w-xl px-4 md:px-5 lg:px-6 py-3 md:py-4 rounded-2xl bg-white/95 shadow-lg border border-white/70 rounded-tl-sm backdrop-blur-sm">
         <div className="flex items-center space-x-1 rtl:space-x-reverse" dir="rtl">
-          <span className="text-sm text-gray-600">מכין שאלה</span>
+          <span className="text-sm md:text-base lg:text-lg text-gray-600">מכין שאלה</span>
           <div className="flex space-x-1 rtl:space-x-reverse">
             {[0, 1, 2].map((i) => (
               <motion.div

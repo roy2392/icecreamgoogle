@@ -144,10 +144,10 @@ export function GeminiChatScreen({ onComplete }: GeminiChatScreenProps) {
   }
 
   return (
-    <div className="min-h-screen min-h-[100dvh] colorful-sprinkles-pattern flex flex-col max-w-md mx-auto relative overflow-hidden">
-      {/* Floating Elements */}
+    <div className="min-h-screen min-h-[100dvh] colorful-sprinkles-pattern flex flex-col max-w-3xl mx-auto relative overflow-hidden md:max-w-2xl lg:max-w-3xl">
+      {/* Floating Elements - Hidden on small screens, visible on tablets and up */}
       <motion.div 
-        className="absolute top-20 left-8 text-2xl opacity-60"
+        className="hidden md:block absolute top-20 left-8 text-2xl md:text-3xl opacity-60"
         animate={{ 
           y: [0, -15, 0],
           rotate: [0, 5, -5, 0]
@@ -162,7 +162,7 @@ export function GeminiChatScreen({ onComplete }: GeminiChatScreenProps) {
       </motion.div>
       
       <motion.div 
-        className="absolute top-40 right-12 text-xl opacity-50"
+        className="hidden md:block absolute top-40 right-12 text-xl md:text-2xl opacity-50"
         animate={{ 
           y: [0, 10, 0],
           rotate: [0, -3, 3, 0]
@@ -178,7 +178,7 @@ export function GeminiChatScreen({ onComplete }: GeminiChatScreenProps) {
       </motion.div>
 
       <motion.div 
-        className="absolute bottom-40 left-6 text-lg opacity-40"
+        className="hidden md:block absolute bottom-40 left-6 text-lg md:text-xl opacity-40"
         animate={{ 
           y: [0, -8, 0],
           rotate: [0, 2, -2, 0]
@@ -194,18 +194,18 @@ export function GeminiChatScreen({ onComplete }: GeminiChatScreenProps) {
       </motion.div>
 
       {/* Header */}
-      <div className="flex items-center justify-between p-4 pt-safe bg-white/10 backdrop-blur-md border-b border-white/20">
+      <div className="flex items-center justify-between p-4 md:p-6 pt-safe bg-white/10 backdrop-blur-md border-b border-white/20">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 bg-gradient-to-br from-pink-400 to-orange-500 rounded-full flex items-center justify-center text-white font-bold">🍦</div>
+          <div className="w-8 h-8 md:w-10 md:h-10 bg-gradient-to-br from-pink-400 to-orange-500 rounded-full flex items-center justify-center text-white font-bold text-sm md:text-base">🍦</div>
           <div className="text-right">
-            <h1 className="text-lg font-bold text-gray-800">NEXT AICREAM</h1>
+            <h1 className="text-lg md:text-xl lg:text-2xl font-bold text-gray-800">NEXT AICREAM</h1>
           </div>
         </div>
-        <img src={pwcLogo} alt="PwC" className="w-12 h-6" />
+        <img src={pwcLogo} alt="PwC" className="w-12 h-6 md:w-16 md:h-8" />
       </div>
 
       {/* Chat Messages */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4 pb-safe">
+      <div className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8 space-y-4 md:space-y-6 pb-safe">
         {messages.map((message) => (
           <ChatBubble key={message.id} message={message.text} isBot={message.isBot} />
         ))}
@@ -217,19 +217,19 @@ export function GeminiChatScreen({ onComplete }: GeminiChatScreenProps) {
 
       {/* Input Area */}
       {!conversationComplete && (
-        <div className="p-4 bg-white/10 backdrop-blur-md border-t border-white/20">
-          <form onSubmit={handleInputSubmit} className="flex gap-2">
+        <div className="p-4 md:p-6 bg-white/10 backdrop-blur-md border-t border-white/20">
+          <form onSubmit={handleInputSubmit} className="flex gap-2 md:gap-4 max-w-4xl mx-auto">
             <Input
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               placeholder="הקלד כאן תשובה שלך..."
-              className="flex-1 text-right"
+              className="flex-1 text-right text-base md:text-lg p-3 md:p-4"
               disabled={isTyping}
             />
             <button
               type="submit"
               disabled={isTyping || !inputValue.trim()}
-              className="w-12 h-12 rounded-full text-white font-bold text-lg shadow-lg disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-xl active:scale-95 transition-all duration-200 border-2"
+              className="w-12 h-12 md:w-14 md:h-14 rounded-full text-white font-bold text-sm md:text-base shadow-lg disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-xl active:scale-95 transition-all duration-200 border-2 flex items-center justify-center"
               style={{ backgroundColor: '#FF6B20', borderColor: '#E85D1C' }}
               onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#E85D1C'}
               onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#FF6B20'}
