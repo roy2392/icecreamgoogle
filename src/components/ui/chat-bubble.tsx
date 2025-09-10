@@ -38,15 +38,26 @@ export function ChatBubble({ message, isBot }: ChatBubbleProps) {
           ? "bg-white/95 shadow-lg border border-white/70 text-gray-800 rounded-tl-sm backdrop-blur-sm" 
           : "bg-[#D93954] text-white shadow-lg rounded-br-sm border border-white/20"
       }`}>
-        <motion.p 
+        <motion.div 
           className="text-sm leading-relaxed text-right"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: isBot ? 0.3 : 0.1 }}
           dir="rtl"
         >
-          {message}
-        </motion.p>
+          {message.split(/(\d+\))/).map((part, index) => {
+            // Check if this is a number pattern (like "1)" or "2)")
+            if (/^\d+\)$/.test(part)) {
+              return (
+                <span key={index}>
+                  {index > 0 && <br />}
+                  <span className="font-semibold">{part}</span>
+                </span>
+              );
+            }
+            return <span key={index}>{part}</span>;
+          })}
+        </motion.div>
       </div>
     </motion.div>
   )

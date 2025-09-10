@@ -4,6 +4,7 @@ import { Input } from "./ui/input"
 import { useKeyboardVisible } from "./ui/use-keyboard"
 import { questionSets, allergyQuestion, type Question } from "../data/questions"
 import { motion } from "motion/react"
+import { Send } from "lucide-react"
 import pwcLogo from 'figma:asset/17ec2cf0792188f890167fc945e9be5f10b81f22.png'
 import logoImage from 'figma:asset/6c5a68932be37448c86b9f62ec515ef146aac3bc.png'
 
@@ -260,9 +261,47 @@ export function ChatScreen({ onComplete }: ChatScreenProps) {
       {/* Input Area */}
       {showInput && currentQuestionData && (
         <div className="p-4 pb-[env(safe-area-inset-bottom,1rem)] bg-white/98 backdrop-blur-md border-t border-white/60 shadow-lg relative z-10 sticky bottom-0">
-          {/* Quick Reply Chips */}
+          {/* Text Input - Always visible */}
+          <form onSubmit={handleInputSubmit} className="mb-4">
+            <div className="flex gap-2 items-center bg-white/95 border border-white/70 rounded-full px-2 py-1 backdrop-blur-sm shadow-sm focus-within:border-[#FD5109] focus-within:ring-1 focus-within:ring-[#FD5109] transition-all duration-200" dir="rtl">
+              <Input
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                placeholder="הקלד כאן תשובה שלך..."
+                className="flex-1 text-right border-0 bg-transparent h-10 px-2 font-fredoka text-sm placeholder:text-gray-400 focus:outline-none focus:ring-0"
+                dir="rtl"
+              />
+              <button
+                type="submit" 
+                disabled={!inputValue.trim()}
+                className="relative bg-gradient-to-b from-[#FFE4E1] via-[#FD5109] to-[#D93954] hover:from-[#FFD6CC] hover:via-[#E04300] hover:to-[#B8334A] disabled:from-gray-200 disabled:via-gray-300 disabled:to-gray-400 text-white rounded-t-full rounded-b-lg h-12 w-10 flex items-center justify-center transition-all duration-200 flex-shrink-0 shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-95"
+                style={{
+                  borderTopLeftRadius: '50%',
+                  borderTopRightRadius: '50%',
+                  borderBottomLeftRadius: '20%',
+                  borderBottomRightRadius: '20%'
+                }}
+              >
+                {/* Ice cream cone pattern */}
+                <div className="absolute bottom-0 left-0 right-0 h-4 bg-gradient-to-b from-[#D4A574] to-[#B8956A] rounded-b-lg opacity-80"
+                     style={{
+                       borderBottomLeftRadius: '20%',
+                       borderBottomRightRadius: '20%',
+                       background: 'repeating-linear-gradient(45deg, #D4A574, #D4A574 2px, #B8956A 2px, #B8956A 4px)'
+                     }}
+                />
+                {/* Send icon */}
+                <Send className="w-4 h-4 relative z-10 text-white drop-shadow-sm" />
+                {/* Ice cream highlight */}
+                <div className="absolute top-1 left-2 w-2 h-2 bg-white/30 rounded-full blur-sm" />
+              </button>
+            </div>
+          </form>
+
+          {/* Quick Reply Chips - Below input */}
           {currentQuestionData.options && (
-            <div className="flex flex-col gap-3 mb-4">
+            <div className="flex flex-col gap-3 mb-3">
+              <div className="text-center text-xs text-gray-500 font-fredoka mb-2">או בחר תשובה מהירה:</div>
               {currentQuestionData.options.map((option, index) => (
                 <button
                   key={option.value}
@@ -275,26 +314,6 @@ export function ChatScreen({ onComplete }: ChatScreenProps) {
               ))}
             </div>
           )}
-
-          {/* Text Input */}
-          <form onSubmit={handleInputSubmit} className="flex gap-3 mb-3">
-            <button
-              type="submit" 
-              disabled={!inputValue.trim()}
-              className="bg-[#FD5109] hover:bg-[#E04300] disabled:bg-gray-300 text-white rounded-full h-12 w-12 flex items-center justify-center transition-colors duration-200 font-fredoka"
-            >
-              שלח
-            </button>
-            <div className="flex-1">
-              <Input
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
-                placeholder="או כתוב תשובה משלך..."
-                className="text-right bg-white/95 border border-white/70 rounded-full h-12 px-4 font-fredoka text-sm placeholder:text-gray-400 focus:border-[#FD5109] focus:ring-1 focus:ring-[#FD5109] backdrop-blur-sm shadow-sm"
-                dir="rtl"
-              />
-            </div>
-          </form>
 
           {/* Powered by PwC */}
           <div className="flex items-center justify-center gap-2 opacity-60 mt-2">
