@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useMemo } from "react"
+import { useState, useEffect, useRef } from "react"
 import { ChatBubble, TypingIndicator } from "./ui/chat-bubble"
 import { Input } from "./ui/input"
 import { useKeyboardVisible } from "./ui/use-keyboard"
@@ -24,8 +24,8 @@ export function GeminiChatScreen({ onComplete }: GeminiChatScreenProps) {
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const isKeyboardVisible = useKeyboardVisible()
   
-  // Generate a unique session ID for this chat session
-  const sessionId = useMemo(() => `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`, [])
+  const [sessionId, setSessionId] = useState(() => 
+    `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`)
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
