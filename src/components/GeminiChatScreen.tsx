@@ -2,7 +2,6 @@ import { useState, useEffect, useRef } from "react"
 import { ChatBubble, TypingIndicator } from "./ui/chat-bubble"
 import { Input } from "./ui/input"
 import { useKeyboardVisible } from "./ui/use-keyboard"
-import { motion } from "motion/react"
 import pwcLogo from 'figma:asset/17ec2cf0792188f890167fc945e9be5f10b81f22.png'
 
 interface GeminiChatScreenProps {
@@ -149,77 +148,6 @@ export function GeminiChatScreen({ onComplete }: GeminiChatScreenProps) {
 
   return (
     <div className="flex flex-col h-full bg-gradient-to-br from-purple-100 to-blue-200">
-      {/* Fun, moving background elements */}
-      <motion.div 
-        className="absolute top-1/4 left-1/4 w-24 h-24 bg-pink-300 rounded-full opacity-20 filter blur-xl"
-        animate={{ 
-          x: [0, 20, 0],
-          y: [0, -20, 0],
-        }}
-        transition={{ 
-          duration: 4,
-          repeat: Infinity,
-          ease: "easeInOut"
-        }}
-      >
-        🍦
-      </motion.div>
-      <motion.div 
-        className="absolute bottom-1/4 right-1/4 w-20 h-20 bg-blue-300 rounded-full opacity-20 filter blur-xl"
-        animate={{ 
-          x: [0, -15, 0],
-          y: [0, 15, 0],
-        }}
-        transition={{ 
-          duration: 5,
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay: 0.5
-        }}
-      >
-        🍨
-      </motion.div>
-      <motion.div 
-        className="absolute top-1/2 right-1/3 w-16 h-16 bg-orange-300 rounded-full opacity-20 filter blur-lg"
-        animate={{ 
-          rotate: [0, 360],
-        }}
-        transition={{ 
-          duration: 6,
-          repeat: Infinity,
-          ease: "linear"
-        }}
-      >
-        🍩
-      </motion.div>
-      <motion.div 
-        className="absolute bottom-1/3 left-1/3 w-12 h-12 bg-purple-300 rounded-full opacity-20 filter blur-md"
-        animate={{ 
-          scale: [1, 1.2, 1],
-        }}
-        transition={{ 
-          duration: 3,
-          repeat: Infinity,
-          ease: "easeInOut"
-        }}
-      >
-        🍬
-      </motion.div>
-      <motion.div 
-        className="absolute top-1/3 right-1/2 w-12 h-12 bg-yellow-300 rounded-full opacity-20 filter blur-md"
-        animate={{ 
-          y: [0, 20, 0],
-        }}
-        transition={{ 
-          duration: 5,
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay: 1
-        }}
-      >
-        🍭
-      </motion.div>
-
       {/* Header */}
       <div className="flex items-center justify-between p-4 md:p-6 lg:landscape:p-4 pt-safe bg-white/10 backdrop-blur-md border-b border-white/20">
         <div className="flex items-center gap-3">
