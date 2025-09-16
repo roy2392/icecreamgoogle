@@ -2,7 +2,6 @@ import { useState, useEffect, useRef } from "react"
 import { ChatBubble, TypingIndicator } from "./ui/chat-bubble"
 import { Input } from "./ui/input"
 import { useKeyboardVisible } from "./ui/use-keyboard"
-import { motion } from "motion/react"
 import pwcLogo from 'figma:asset/17ec2cf0792188f890167fc945e9be5f10b81f22.png'
 
 interface GeminiChatScreenProps {
@@ -22,6 +21,7 @@ export function GeminiChatScreen({ onComplete }: GeminiChatScreenProps) {
   const [conversationComplete, setConversationComplete] = useState(false)
   const [answers, setAnswers] = useState<Record<string, string>>({})
   const messagesEndRef = useRef<HTMLDivElement>(null)
+  const [showRestartButton, setShowRestartButton] = useState(false)
   const isKeyboardVisible = useKeyboardVisible()
   
   const [sessionId, setSessionId] = useState(() => 
@@ -63,6 +63,7 @@ export function GeminiChatScreen({ onComplete }: GeminiChatScreenProps) {
 
   const startConversation = async () => {
     setIsTyping(true)
+    setShowRestartButton(false)
     try {
       const apiUrl = import.meta.env.DEV 
         ? 'http://localhost:3000/api/chat'
@@ -81,19 +82,36 @@ export function GeminiChatScreen({ onComplete }: GeminiChatScreenProps) {
       
       setTimeout(() => {
         setIsTyping(false)
-        addBotMessage(data.response || 'שלום! בואו נתחיל!')
+        addBotMessage(data.message)
+        setShowRestartButton(true)
       }, 1000)
     } catch (error) {
-      setTimeout(() => {
-        setIsTyping(false)
-        addBotMessage('שלום! בואו נתחיל עם השאלות שלנו!')
-      }, 1000)
+      console.error("Error starting conversation:", error)
+      addBotMessage("מצטער, אני לא מצליח להתחיל את השיחה כרגע. נסה שוב מאוחר יותר.")
+      setIsTyping(false)
+      setShowRestartButton(true)
     }
   }
 
-  const sendMessageToGemini = async (message: string) => {
+  const handleRestartChat = async () => {
+    setMessages([])
+    setIsTyping(false)
+    setInputValue('')
+    setConversationComplete(false)
+    setAnswers({})
+    setSessionId(`session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`)
+    await startConversation()
+  }
+
+  const handleInputSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!inputValue.trim()) return
+
+    const userInput = inputValue
+    addUserMessage(userInput)
+    setInputValue("")
     setIsTyping(true)
-    
+
     try {
       const apiUrl = import.meta.env.DEV 
         ? 'http://localhost:3000/api/chat'
@@ -101,98 +119,35 @@ export function GeminiChatScreen({ onComplete }: GeminiChatScreenProps) {
       const response = await fetch(apiUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt: message, sessionId })
+        body: JSON.stringify({ prompt: userInput, sessionId })
       })
-      
+
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
       }
-      
-      const data = await response.json()
-      
-      setTimeout(() => {
-        setIsTyping(false)
-        const botResponse = data.response || 'מצטער, לא הצלחתי להבין.'
-        addBotMessage(botResponse)
-        
-        // Check if conversation is complete (bot mentions showing screen at booth)
-        if (botResponse.includes('הציגו את המסך בדוכן') || botResponse.includes('בתיאבון')) {
-          setConversationComplete(true)
-          // Extract topping information and complete
-          setTimeout(() => {
-            onComplete({ finalResult: botResponse })
-          }, 2000)
-        }
-      }, 1000)
-      
-    } catch (error) {
-      setTimeout(() => {
-        setIsTyping(false)
-        addBotMessage('מצטער, יש בעיה בתקשורת. אנא נסה שוב.')
-      }, 1000)
-    }
-  }
 
-  const handleInputSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (inputValue.trim() && !isTyping && !conversationComplete) {
-      const userMessage = inputValue.trim()
-      addUserMessage(userMessage)
-      setInputValue("")
-      sendMessageToGemini(userMessage)
+      const data = await response.json()
+
+      if (data.question) {
+        setAnswers(prev => ({ ...prev, [data.question]: userInput }))
+      }
+
+      if (data.isDone) {
+        setConversationComplete(true)
+        onComplete({ ...answers, [data.question]: userInput })
+      }
+
+      setIsTyping(false)
+      addBotMessage(data.message)
+    } catch (error) {
+      console.error("Error sending message:", error)
+      addBotMessage("מצטער, אני לא מצליח לשלוח את ההודעה כרגע. נסה שוב מאוחר יותר.")
+      setIsTyping(false)
     }
   }
 
   return (
-    <div className="h-screen h-[100dvh] colorful-sprinkles-pattern flex flex-col w-full relative overflow-hidden">
-      {/* Floating Elements - Hidden on small screens, visible on tablets and up */}
-      <motion.div 
-        className="hidden md:block absolute top-20 left-8 text-2xl md:text-3xl opacity-60"
-        animate={{ 
-          y: [0, -15, 0],
-          rotate: [0, 5, -5, 0]
-        }}
-        transition={{ 
-          duration: 4,
-          repeat: Infinity,
-          ease: "easeInOut"
-        }}
-      >
-        🍦
-      </motion.div>
-      
-      <motion.div 
-        className="hidden md:block absolute top-40 right-12 text-xl md:text-2xl opacity-50"
-        animate={{ 
-          y: [0, 10, 0],
-          rotate: [0, -3, 3, 0]
-        }}
-        transition={{ 
-          duration: 3,
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay: 0.5
-        }}
-      >
-        🌈
-      </motion.div>
-
-      <motion.div 
-        className="hidden md:block absolute bottom-40 left-6 text-lg md:text-xl opacity-40"
-        animate={{ 
-          y: [0, -8, 0],
-          rotate: [0, 2, -2, 0]
-        }}
-        transition={{ 
-          duration: 5,
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay: 1
-        }}
-      >
-        🍭
-      </motion.div>
-
+    <div className="flex flex-col h-full bg-gradient-to-br from-purple-100 to-blue-200">
       {/* Header */}
       <div className="flex items-center justify-between p-4 md:p-6 lg:landscape:p-4 pt-safe bg-white/10 backdrop-blur-md border-b border-white/20">
         <div className="flex items-center gap-3">
@@ -200,6 +155,14 @@ export function GeminiChatScreen({ onComplete }: GeminiChatScreenProps) {
           <div className="text-right">
             <h1 className="text-lg md:text-xl lg:text-2xl font-bold text-gray-800">NEXT AICREAM</h1>
           </div>
+          {showRestartButton && (
+            <button
+              onClick={handleRestartChat}
+              className="ml-4 px-3 py-1 text-sm font-semibold text-white bg-red-500 rounded-md hover:bg-red-600 transition-colors"
+            >
+              Restart Chat
+            </button>
+          )}
         </div>
         <img src={pwcLogo} alt="PwC" className="w-12 h-6 md:w-16 md:h-8" />
       </div>
