@@ -34,6 +34,16 @@ Conversation Flow
 // Store chat sessions in memory (in production, use proper session management)
 const chatSessions = new Map();
 
+/**
+ * Handles chat requests by sending a prompt to the Google Gemini model and returning the response.
+ * It manages chat sessions in memory, creating a new session if one doesn't exist for the given sessionId.
+ *
+ * @param {object} req - The request object, containing the prompt and an optional sessionId in the body.
+ * @param {string} req.body.prompt - The user's prompt to send to the chat model.
+ * @param {string} [req.body.sessionId='default'] - An optional ID to maintain conversation history.
+ * @param {object} res - The response object, used to send back the model's response or an error.
+ * @returns {Promise<void>} A promise that resolves when the response has been sent.
+ */
 export default async function handler(req, res) {
   // Enable CORS
   res.setHeader('Access-Control-Allow-Credentials', true);
